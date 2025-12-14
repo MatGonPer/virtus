@@ -17,13 +17,12 @@ COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.con
 
 WORKDIR /var/www/html
 
-RUN mkdir -p /var/www/html/storage/framework/sessions \
-    /var/www/html/storage/framework/views \
-    /var/www/html/storage/framework/cache \
-    /var/www/html/bootstrap/cache \
-    && chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+COPY . .
 
 EXPOSE 80
 
+ENTRYPOINT ["entrypoint.sh"]
 CMD ["apache2-foreground"]
